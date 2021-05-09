@@ -1,80 +1,70 @@
-var Engine = Matter.Engine,
-  World = Matter.World,
-  Events = Matter.Events,
-  Bodies = Matter.Bodies;
- 
-var particles = [];
-var plinkos = [];
-var divisions =[];
-var divisionHeight=300;
-var score =0;
-function setup() {
-  createCanvas(800, 800);
-  engine = Engine.create();
-  world = engine.world;
-  ground = new Ground(width/2,height,width,20);
+const Engine = Matter.Engine;
+const World= Matter.World;
+const Bodies = Matter.Bodies;
+const Constraint = Matter.Constraint;
 
-  //create division objects
-  for (var k = 0; k <=800 ; k = k + 80) {
-    divisions.push(new Divisions(k, height-divisionHeight/2, 10, divisionHeight));
-  }
+var engine, world;
+var backgroundImg;
+var sunrise1, sunrise2, sunrise3, sunrise4, sunrise5, sunrise6;
+var sunset7, sunset8, sunset9, sunset10, sunset11, sunset12; 
 
-  //create 1st row of plinko objects
-  for (var j = 75; j <=width; j=j+50) { 
-    plinkos.push(new Plinko(j,75));
-  }
+var bg ;
 
-  //create 2nd row of plinko objects
-  for (var j = 50; j <=width-10; j=j+50) 
-  {
-    plinkos.push(new Plinko(j,175));
-  }
-
-  //create 3rd row of plinko objects
-  for (var j = 25; j <=width-10; j=j+50) 
-  {
-    plinkos.push(new Plinko(j,275));
-  }
-  
-  //create 4th row of plinko objects
-  for (var j = 1 ; j <=width-10; j=j+50) 
-  {
-    plinkos.push(new Plinko(j,375));
-  }
-
-  
-  
+function preload() {
     
-}
- 
-
-
-function draw() {
-  background("black");
-  textSize(20)
- 
-  Engine.update(engine);
-  ground.display();
-  
-  //display the plinkos 
-  for (var i = 0; i < plinkos.length; i++) {
-    plinkos[i].display();   
-  }
+    getBackgroundImg();
    
-  //display the divisions
-  for (var k = 0; k < divisions.length; k++) {
-    divisions[k].display();
-  }
+}
 
-  //create particle objects
-  if(frameCount%90===0){
-    particles.push(new Particle(random(width/2-10,width/2+10), 10,10))
+function setup(){
+    var canvas = createCanvas(1200,700);
+    engine = Engine.create();
+    world = engine.world;
+}
 
- }
+function draw(){
 
-  //display the paricles 
-  for (var i = 0; i < particles.length; i++) {
-    particles[i].display();   
-  }
+    if(backgroundImg){
+        background(backgroundImg)
+    }
+
+    Engine.update(engine);
+
+
+}
+
+async function getBackgroundImg(){
+
+    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata")
+var responseJSON = await response.json()
+var dt = responseJSON.datetime
+var hour = dt.slice(11,13)
+console.log(hour)
+
+if(hour>05 && hour < 06 ){
+    backgroundImg = loadImage("sunrise1.png")
+}else if(hour>07 && hour < 08 ){
+    backgroundImg = loadImage("sunrise2.png")
+}else if(hour>09 && hour < 010 ){
+    backgroundImg = loadImage("sunrise3.png")
+}else if(hour>10 && hour < 11 ){
+    backgroundImg = loadImage("sunrise4.png")
+}else if(hour>12 && hour < 13 ){
+    backgroundImg = loadImage("sunrise5.png")
+}else if(hour>14 && hour <15 ){
+    backgroundImg = loadImage("sunrise6.png")
+}else if(hour>16 && hour <17 ){
+    backgroundImg = loadImage("sunset7.png")
+}else if(hour>18 && hour <19 ){
+    backgroundImg = loadImage("sunset8.png")
+}else if(hour>20 && hour <21 ){
+    backgroundImg = loadImage("sunset9.png")
+}else if(hour>22 && hour <23 ){
+    backgroundImg = loadImage("sunset10.png")
+}else if(hour>23 && hour <00 ){
+    backgroundImg = loadImage("sunset11.png")
+}else {
+    backgroundImg = loadImage("sunset12.png")
+}
 
 }
